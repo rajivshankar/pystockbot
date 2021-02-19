@@ -7,8 +7,8 @@ __pycache__/
 *.so
 
 #local settings
-neymo/local_settings.py
-#neymo/live_settings.py
+pystockbot/local_settings.py
+#npystockbot/live_settings.py
 
 # Distribution / packaging
 .Python

@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'django_extensions',
+
     'assets',
 ]
 
@@ -155,3 +157,16 @@ LOGGING = {
         },
     },
 }
+
+######### The following section should be at the end of this file #########
+dev_env = False
+if (os.environ.get('PYSTOCKBOT_DEV', False)):
+    dev_env = True
+
+PYSTOCKBOT_LOCAL = False
+
+if dev_env:
+    try:
+        exec(open(os.path.join(APP_DIR, "local_settings.py")).read())
+    except IOError:
+        print('IOError in settings')

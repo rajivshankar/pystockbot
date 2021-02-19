@@ -22,23 +22,32 @@ COL_MAPPING_YAHOO_DATABASE = {
 def update_asset_data_for_sp500():
     df_sp500_metadata = dc.get_SP500_info()
     number_of_records = 0
+    asset_list = get_asset_list(df_sp500_metadata)
+    try:
+        logger.debug(f'storing Asset list')
+        Asset.objects.bulk_create(asset_list)
+        number_of_records = len(asset_list)
+    except Exception as e:
+        logger.error(f"Error {e} saving asset list")
+    return number_of_records
+
+
+def get_asset_list(df_sp500_metadata):
+    asset_list = []
+    if df_sp500_metadata.empty:
+        return asset_list
     for i in df_sp500_metadata.index:
         symbol = df_sp500_metadata.loc[i, 'Symbol']
         logger.debug(f'adding asset class for {symbol}')
         asset = Asset(
-          symbol=symbol,
-          market_symbol='^GSPC',
-          security_name=df_sp500_metadata.loc[i, 'Security'],
-          gics_industry=df_sp500_metadata.loc[i, 'GICS Sector'],
-          gics_sub_industry=df_sp500_metadata.loc[i, 'GICS Sub-Industry'],
-          )
-        try:
-            asset.save()
-            number_of_records += 1
-        except:
-            logger.error(f"Error while saving asset: {symbol}")
-    
-    return number_of_records
+            symbol=symbol,
+            market_symbol='^GSPC',
+            security_name=df_sp500_metadata.loc[i, 'Security'],
+            gics_industry=df_sp500_metadata.loc[i, 'GICS Sector'],
+            gics_sub_industry=df_sp500_metadata.loc[i, 'GICS Sub-Industry'],
+        )
+        asset_list.append(asset)
+    return asset_list
 
     
 def update_asset_price_data_for_sp500():
