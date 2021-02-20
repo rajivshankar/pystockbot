@@ -99,6 +99,7 @@ def get_data_for_ticker(ticker, dataset='all'):
         df_prev_data = df_new_data
     else:
         df_prev_data =  df_prev_data.append(df_new_data)
+    df_prev_data.drop_duplicates(inplace=True)
     return df_prev_data
 
 
@@ -157,3 +158,13 @@ def get_asset_price_list(ticker, df_ticker_data):
     except Exception as e:
         logger.error(f'Error {e} processing {ticker}. Skipping')
     return asset_price_list
+
+def get_index_ticker(ticker):
+    index_ticker = ''
+    try:
+        asset = Asset.objects.get(symbol=ticker)
+        index_ticker = asset.market_symbol
+    except Exception as e:
+        logger.error(f'Exception {e} occured when retrieving index ticker for {ticker}')
+    return index_ticker
+ 

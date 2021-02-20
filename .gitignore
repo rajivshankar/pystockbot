@@ -75,4 +75,11 @@ dat/*.xls*
 #ipython files
 *ipynb*
 
+#database
+db.sqlite3
 
+#scripts
+scripts/*
+
+#test data
+test_data/*

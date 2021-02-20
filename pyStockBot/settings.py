@@ -45,7 +45,8 @@ INSTALLED_APPS = [
 
     'django_extensions',
 
-    'assets',
+    'assets.apps.AssetsConfig',
+    'portfolio.apps.PortfolioConfig',
 ]
 
 MIDDLEWARE = [
@@ -65,7 +66,6 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             os.path.join(APP_DIR, 'templates'),
-            'templates',
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -74,6 +74,13 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
+                "django.template.context_processors.i18n",
+                "django.template.context_processors.media",
+                "django.template.context_processors.static",
+                "django.template.context_processors.tz",
+                'django.template.context_processors.request',
+
             ],
         },
     },
