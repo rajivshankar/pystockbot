@@ -76,7 +76,7 @@ def update_asset_price_for_sp500_ticker(ticker):
         AssetPrice.objects.bulk_create(asset_price_list)
         num_price_points = len(asset_price_list)
     except Exception as e:
-        logger.error(f"{ticker}: Error {e} on price_point for {date}")
+        logger.error(f"{ticker}: Error {e} occured")
     return num_price_points
 
 

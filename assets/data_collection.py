@@ -1,9 +1,7 @@
 import os
-import sys
 import requests
 import logging
-import csv
-from datetime import datetime, date, timedelta
+from datetime import datetime, date, timedelta, timezone
 from bs4 import BeautifulSoup
 import pandas as pd
 import pandas_datareader.data as web
@@ -62,7 +60,7 @@ def get_start_date(end_date=datetime.now(), num_years=ANALYSIS_PERIOD):
     Get the start date of the analysis period based on an end date
     """
     start_date = end_date - timedelta(num_years*365)
-    start_date = date(start_date.year, start_date.month, start_date.day)
+    start_date = pd.to_datetime(date(start_date.year, start_date.month, start_date.day))
     return(start_date)
 
 
@@ -71,8 +69,8 @@ def get_start_and_end_dates(new_start_date=None):
     Get the start and end dates based on the start date input
     if the start date is none, get the whole daya
     """
-    curr_date = datetime.now()
-    curr_date = date(curr_date.year, curr_date.month, curr_date.day)
+    curr_date = datetime.utcnow()
+    curr_date = pd.to_datetime(date(curr_date.year, curr_date.month, curr_date.day))
     if not(new_start_date):
         end_date = curr_date
         start_date = get_start_date(end_date, ANALYSIS_PERIOD)
@@ -80,6 +78,8 @@ def get_start_and_end_dates(new_start_date=None):
         start_date = new_start_date
         end_date = curr_date
     
+    start_date = start_date.replace(tzinfo=timezone.utc)
+    end_date = end_date.replace(tzinfo=timezone.utc)
     return start_date, end_date
 
 
@@ -117,6 +117,7 @@ def get_ticker_start_and_end_dates(df_data):
         new_start_date = df_data.index.max() + timedelta(days=1)
         logger.debug(f'new start date = {new_start_date}')
         start_date, end_date = get_start_and_end_dates(new_start_date)
+    logger.debug(f'returning {start_date} and {end_date} from get_ticker_start_and_end_dates')
     return start_date, end_date
 
 

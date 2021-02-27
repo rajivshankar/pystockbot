@@ -76,7 +76,7 @@ dat/*.xls*
 *ipynb*
 
 #database
-db.sqlite3
+db.sqlite3*
 
 #scripts
 scripts/*
